@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { findRenderedDOMComponentWithTag } from "react-dom/test-utils";
 import './App.css';
 import SingleCard from "./components/SingleCard";
-
+import image from "./images/logo192.png";
 
 
 function fillArray()
@@ -104,6 +104,7 @@ class CardBack extends React.Component {
     };
     return (
       <div style={cardStyle}>
+        <img className="img" src={image} alt="react logo"></img>
       </div>
     );
 
@@ -291,7 +292,7 @@ class MatchDisplay extends React.Component {
               }
             })
           })
-          setTimeout(() => resetTurn(), 500)
+          
         }
         else{
           setTimeout(() => resetTurn(), 500)
