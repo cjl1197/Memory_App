@@ -129,7 +129,7 @@ function fillArray()
 
     return (
       <div className="App">
-        <h1 className="App-header">Keep trying rebekah</h1>
+        <h1 className="App-header">Memory Game</h1>
         <CountDownTimerDisplay timer = {<Timer active={false} duration={null}><Timecode /></Timer>}/>
         
         <TurnDisplay count={turns} />
