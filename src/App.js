@@ -10,7 +10,7 @@ import Timecode from 'react-timecode';
 
 
 
-
+// function builds array of color cards and randomizes their indexes
 function fillArray()
 {
   let colorCode;
@@ -29,18 +29,19 @@ function fillArray()
     [swatches[i], swatches[j]] = [swatches[j], swatches[i]];
   }
 
-        function randColor()
-        {
-            var colorCode = "#";
-            var hex = "0123456789ABCDEF";
+  function randColor()
+  {
+    var colorCode = "#";
+    var hex = "0123456789ABCDEF";
 
-              for (var i = 0; i < 6; i++) {
-                colorCode += hex[Math.floor(Math.random() * 16)];
-              }
+    for (var i = 0; i < 6; i++) 
+    {
+      colorCode += hex[Math.floor(Math.random() * 16)];
+    }
 
-            return colorCode;
+    return colorCode;
 
-        }
+  }
 
   return swatches;
 }
@@ -128,8 +129,8 @@ function fillArray()
 
     return (
       <div className="App">
-        <h1 className="App-header">Memory Game</h1>
-        <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
+        <h1 className="App-header">Keep trying rebekah</h1>
+        <CountDownTimerDisplay timer = {<Timer active={false} duration={null}><Timecode /></Timer>}/>
         
         <TurnDisplay count={turns} />
 
