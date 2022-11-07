@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import './App.css';
 import SingleCard from "./components/SingleCard";
-import image from "./images/logo192.png";
+import Card from "./components/Card";
+import CardBack from "./components/CardBack";
+import CountDownTimerDisplay from "./components/CountDownTimerDisplay";
+import TurnDisplay from "./components/TurnDisplay";
+import Timer from 'react-timer-wrapper';
+import Timecode from 'react-timecode';
+import reactTimecode from "react-timecode";
+import reactTimerWrapper from "react-timer-wrapper";
 
 
 function fillArray()
@@ -40,212 +47,13 @@ return colorCode;
 
 }
 
-class Square extends React.Component {
-  render() {
-    var squareStyle = {
-      height: 150,
-      borderRadius: 5,
-      backgroundColor: this.props.color
-    };
-    return(
-      <div style={squareStyle}></div>
-    );
-  }
-}
-
-class Label extends React.Component {
-  render() {
-    var labelStyle = {
-      textAlign: "center",
-      fontFamily: "sans-serif",
-      fontWeight: "bold",
-    };
-    return (
-      <p style={labelStyle}>{this.props.color}</p>
-    );
-  }
-}
- 
-class Card extends React.Component {
-
-  render() {
-    var cardStyle = {
-      height: 200,
-      width: 150,
-      backgroundColor: "#FFF",
-      display: "inline-block",
-      boxShadow: "0px 0px 5px #666",
-      borderRadius: 5
-    };
-
-    return (
-      
-      <div style={cardStyle} >
-        <Square color={this.props.color}/>
-        <Label color={this.props.color}/>
-      </div>
-    );
-
-  }
-}
-
-
-class CardBack extends React.Component {
-  render() {
-    var cardStyle = {
-      height: 197,
-      width: 146,
-      backgroundColor: "#000",
-      display: "inline-block",
-      boxShadow: "0px 0px 5px #666",
-      border: "2px solid grey",
-      borderRadius: 5
-    };
-    return (
-      <div style={cardStyle}>
-        <img className="img" src={image} alt="react logo"></img>
-      </div>
-    );
-
-  }
-}
-
-class CountDownTimer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      strikes: 0,
-    };
-
-  }
-  
-  
-  timerTick = () =>{
-    this.setState({
-      strikes: this.state.strikes + 1,
-    });
-  }
-
-  componentDidMount() {
-    setInterval(this.timerTick, 1000);
-  }
- 
-  render() {
-    var counterStyle = {
-      color: "#61dafb",
-      fontSize: 30,
-      margin: 0
-    };
- 
-    var count = this.state.strikes.toLocaleString();
-
-  return (
-        <h1 style={counterStyle}>{count}</h1>
-      );
-  }
-}
-
-class CountDownTimerDisplay extends React.Component {
-  render() {
-    var commonStyle = {
-      margin: 0,
-      padding: 0
-    };
- 
-    var divStyle = {
-      width: 250,
-      textAlign: "center",
-      padding: 20,
-      margin: "auto",
-      marginLeft: 111,
-      marginRight: 50,
-      fontFamily: "sans-serif",
-      color: "#999999",
-      borderRadius: 10,
-      float: "left"
-      
-    };
- 
-    var textStyles = {
-      emphasis: {
-        fontSize: 38,
-        ...commonStyle
-      },
-      smallEmphasis: {
-        ...commonStyle
-      },
-      small: {
-        fontSize: 17,
-        opacity: 0.5,
-        ...commonStyle
-      }
-    };
- 
-    return (
-      <div style={divStyle}>
-        <h2 style={textStyles.smallEmphasis}>Time</h2>
-        
-        <CountDownTimer />
-      </div>
-    );
-  }
-}
-    
-
-  function MatchDisplay({count}) {
-    var commonStyle = {
-      margin: 0,
-      padding: 0
-    }
-
-    var divStyle = {
-      width: 250,
-      textAlign: "center",
-      padding: 20,
-      margin: "auto",
-      fontFamily: "sans-serif",
-      color: "#999999",
-      borderRadius: 10, 
-      float: "left"
-    };
-
-    var textStyles = {
-      emphasis: {
-      fontSize: 38,
-      ...commonStyle
-      },
-      smallEmphasis: {
-      ...commonStyle
-      },
-      small: {
-      fontSize: 17,
-      opacity: 0.5,
-      ...commonStyle
-      }
-    };
-
-    var counterStyle = {
-      color: "#61dafb",
-      fontSize: 30,
-      margin: 0,
-      fontWeight: "bold"
-    };
-   
-      return (
-        <div style={divStyle}>
-          <h2 style={textStyles.smallEmphasis}>Turns</h2>
-            <div style={counterStyle}>{count}</div>
-          </div>
-      );
-    }
-
  export default function App() {
 
   const [cardFronts, setCardFronts] = useState([])
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(false) 
   
   const cards = fillArray()
   
@@ -261,7 +69,7 @@ class CountDownTimerDisplay extends React.Component {
   }
 
 
-
+ 
  const handleChoice = (cardFronts) => {
     choiceOne ? setChoiceTwo(cardFronts): setChoiceOne(cardFronts)
  }
@@ -292,7 +100,7 @@ class CountDownTimerDisplay extends React.Component {
     }
  }, [choiceOne, choiceTwo])
 
-
+// sets choices back to null, add 1 to the turn count and re-enables onclick to choose card
  const resetTurn = () => {
   setChoiceOne(null)
   setChoiceTwo(null)
@@ -304,11 +112,14 @@ class CountDownTimerDisplay extends React.Component {
     newCards()
  }, [])
 
+ 
+
                     return (
     <div className="App">
       <h1 className="App-header">Color Memory Game</h1>
-      <CountDownTimerDisplay />
-      <MatchDisplay
+      <CountDownTimerDisplay timer = {<Timer active={false} duration={null}><Timecode /></Timer>}/>
+      
+      <TurnDisplay
         count={turns} />
          
            <div className="cards">
