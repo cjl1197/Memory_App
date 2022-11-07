@@ -47,16 +47,20 @@ function fillArray()
 
  export default function App() {
 
-  const [cardFronts, setCardFronts] = useState([])
+  // declaration of variables with setState functions
+  const [cardFront, setCardFronts] = useState([])
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
   const [disabled, setDisabled] = useState(false) 
   const [count, setCount] = useState(0)
 
+  // function call on start or when New Game button is pushed
+  // fills cardFront array...adds id and matched boolean to each card front
+  // resets card choices to null and integers to 0
   const newCards = () => {
     const newCards = fillArray()
-      .map((cardFronts) => ({...cardFronts, id: Math.random(), matched: false}))
+      .map((cardFront) => ({...cardFront, id: Math.random(), matched: false}))
 
     setCardFronts(newCards)
     setChoiceOne(null)
@@ -67,11 +71,15 @@ function fillArray()
 
   }
 
- const handleChoice = (cardFronts) => {
-    choiceOne ? setChoiceTwo(cardFronts): setChoiceOne(cardFronts)
+  // checks if a choice has been made when card is clicked and sets choiceOne or choiceTwo
+ const handleChoice = (cardFront) => {
+    choiceOne ? setChoiceTwo(cardFront): setChoiceOne(cardFront)
  }
 
-
+// once two card choices have been made this function checks if the choice match
+// if they match it iterates through the previous state of cardFront, finds cardFront
+// that match choice and sets a new cardFront with its matched property to true
+// finally it calls the reset function
  useEffect(() => {
     if (choiceOne && choiceTwo)
     {
@@ -79,17 +87,17 @@ function fillArray()
         if (choiceOne.props.card === choiceTwo.props.card){
           setCount(prevCount => prevCount + 1)
           setTimeout(() =>
-          setCardFronts(prevCardFronts => {
-            return prevCardFronts.map(cardFronts => {
-              if (cardFronts.props.card === choiceOne.props.card)
+          setCardFronts(prevCardFront => {
+            return prevCardFront.map(cardFront => {
+              if (cardFront.props.card === choiceOne.props.card)
               {
                 resetTurn()
-                return {...cardFronts, matched: true}
+                return {...cardFront, matched: true}
               }
               else
               {
                 resetTurn()
-                return cardFronts
+                return cardFront
               }
             })
           }), 1300)
@@ -108,43 +116,38 @@ function fillArray()
   setChoiceTwo(null)
   setTurns(prevTurns => prevTurns + 1)
   setDisabled(false)
-  if (count === 10)
-  {
-    Timer.active= false;
-  }
  }
 
+// calls the newCards function when the page initially loads
+// without this there would be no cards visible on initial load
  useEffect(() =>{
     newCards()
  }, [])
 
-  return (
-    <div className="App">
-      <h1 className="App-header">Memory Game</h1>
-      <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
-      
-      <TurnDisplay
-        count={turns} />
-         
-           <div className="cards">
-          {cardFronts.map(cardFronts => (
-            <SingleCard 
-              key = {cardFronts.id}  
-              cardFronts = {cardFronts}
-              cardBack = {<CardBack />}
-              handleChoice ={handleChoice}
-              flipped={cardFronts === choiceOne || cardFronts === choiceTwo} 
-              solved={cardFronts.matched}
-              disabled={disabled}/>
-          ))}
-        </div>
-        <button 
-        onClick = {() => {
-          newCards();
-        }}> New Game </button>
-    </div>
-  );
-}
-
-
- 
+    return (
+      <div className="App">
+        <h1 className="App-header">Memory Game</h1>
+        <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
+        
+        <TurnDisplay
+          count={turns} />
+          
+            <div className="cards">
+            {cardFront.map(cardFront => (
+              <SingleCard 
+                key = {cardFront.id}  
+                cardFront = {cardFront}
+                cardBack = {<CardBack />}
+                handleChoice ={handleChoice}
+                flipped={cardFront === choiceOne || cardFront === choiceTwo} 
+                solved={cardFront.matched}
+                disabled={disabled}/>
+            ))}
+          </div>
+          <button 
+          onClick = {() => {
+            newCards();
+          }}> New Game </button>
+      </div>
+    );
+  }

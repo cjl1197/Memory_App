@@ -1,13 +1,13 @@
 import React from 'react'
 import './SingleCard.css'
 
-function SingleCard({cardFronts, cardBack, handleChoice, flipped, solved, disabled}) {
+function SingleCard({cardFront, cardBack, handleChoice, flipped, solved, disabled}) {
 
     
     
         const handleClick = () => {
           if(!disabled)
-            handleChoice(cardFronts)
+            handleChoice(cardFront)
         }
       
 
@@ -16,7 +16,7 @@ function SingleCard({cardFronts, cardBack, handleChoice, flipped, solved, disabl
     <div className = "card">
       <div className={solved ? "solved" : ""}>
               <div className={flipped ? "flipped" : ""}>
-                <div className='front'>{cardFronts}</div>
+                <div className='front'>{cardFront}</div>
                 <div className='back'
                     onClick={handleClick}>{cardBack}
                 </div>
