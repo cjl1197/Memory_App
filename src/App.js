@@ -65,6 +65,7 @@ return colorCode;
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(0)
+    
 
   }
 
@@ -117,7 +118,7 @@ return colorCode;
                     return (
     <div className="App">
       <h1 className="App-header">Color Memory Game</h1>
-      <CountDownTimerDisplay timer = {<Timer active={false} duration={null}><Timecode /></Timer>}/>
+      <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
       
       <TurnDisplay
         count={turns} />
