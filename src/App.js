@@ -7,22 +7,18 @@ import CountDownTimerDisplay from "./components/CountDownTimerDisplay";
 import TurnDisplay from "./components/TurnDisplay";
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
-import reactTimecode from "react-timecode";
-import reactTimerWrapper from "react-timer-wrapper";
 
 
 function fillArray()
 {
   let colorCode;
   let swatches = [];
+
   for (var i = 0; i < 10; ++i)
   {
    colorCode = randColor();
-   swatches.push(<div card = {i} ><Card color = {colorCode} /></div>);
-   swatches.push(<div card = {i} ><Card color = {colorCode} /></div>);
-  //  swatches.push(<Card card = {i} color = {colorCode} />);
-  //  swatches.push(<Card card = {i} color = {colorCode} />);
-
+   swatches.push(<div card = {i + 1} ><Card color = {colorCode} /></div>);
+   swatches.push(<div card = {i + 1} ><Card color = {colorCode} /></div>);
   }  
 
   for (let i = swatches.length - 1; i > 0; i--)
@@ -31,21 +27,23 @@ function fillArray()
     [swatches[i], swatches[j]] = [swatches[j], swatches[i]];
   }
 
+        function randColor()
+        {
+            var colorCode = "#";
+            var hex = "0123456789ABCDEF";
+
+              for (var i = 0; i < 6; i++) {
+                colorCode += hex[Math.floor(Math.random() * 16)];
+              }
+
+            return colorCode;
+
+        }
+
   return swatches;
 }
 
-function randColor()
-{
-var colorCode = "#";
-var hex = "0123456789ABCDEF";
 
-  for (var i = 0; i < 6; i++) {
-    colorCode += hex[Math.floor(Math.random() * 16)];
-  }
-
-return colorCode;
-
-}
 
  export default function App() {
 
@@ -54,50 +52,53 @@ return colorCode;
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
   const [disabled, setDisabled] = useState(false) 
-  
-  const cards = fillArray()
-  
+  const [count, setCount] = useState(0)
+
   const newCards = () => {
-    const newCards = [...cards]
+    const newCards = fillArray()
       .map((cardFronts) => ({...cardFronts, id: Math.random(), matched: false}))
 
     setCardFronts(newCards)
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(0)
+    setCount(0)
     
 
   }
 
-
- 
  const handleChoice = (cardFronts) => {
     choiceOne ? setChoiceTwo(cardFronts): setChoiceOne(cardFronts)
  }
+
 
  useEffect(() => {
     if (choiceOne && choiceTwo)
     {
       setDisabled(true)
         if (choiceOne.props.card === choiceTwo.props.card){
+          setCount(prevCount => prevCount + 1)
+          setTimeout(() =>
           setCardFronts(prevCardFronts => {
             return prevCardFronts.map(cardFronts => {
               if (cardFronts.props.card === choiceOne.props.card)
               {
+                resetTurn()
                 return {...cardFronts, matched: true}
               }
               else
               {
+                resetTurn()
                 return cardFronts
               }
             })
-          })
-          resetTurn()
+          }), 1300)
+         
         }
         else{
           setTimeout(() => resetTurn(), 1300)
-          console.log(choiceOne, choiceTwo)
         }
+        console.log(choiceOne, choiceTwo)
     }
  }, [choiceOne, choiceTwo])
 
@@ -107,17 +108,19 @@ return colorCode;
   setChoiceTwo(null)
   setTurns(prevTurns => prevTurns + 1)
   setDisabled(false)
+  if (count === 10)
+  {
+    Timer.active= false;
+  }
  }
 
  useEffect(() =>{
     newCards()
  }, [])
 
- 
-
-                    return (
+  return (
     <div className="App">
-      <h1 className="App-header">Color Memory Game</h1>
+      <h1 className="App-header">Memory Game</h1>
       <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
       
       <TurnDisplay
