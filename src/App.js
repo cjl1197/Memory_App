@@ -9,6 +9,8 @@ import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 
 
+
+
 function fillArray()
 {
   let colorCode;
@@ -91,17 +93,17 @@ function fillArray()
             return prevCardFront.map(cardFront => {
               if (cardFront.props.card === choiceOne.props.card)
               {
-                resetTurn()
+              
                 return {...cardFront, matched: true}
               }
               else
               {
-                resetTurn()
+          
                 return cardFront
               }
             })
           }), 1300)
-         
+          setTimeout(() => resetTurn(), 1300)
         }
         else{
           setTimeout(() => resetTurn(), 1300)
@@ -114,8 +116,8 @@ function fillArray()
  const resetTurn = () => {
   setChoiceOne(null)
   setChoiceTwo(null)
-  setTurns(prevTurns => prevTurns + 1)
   setDisabled(false)
+  setTurns(prevTurns => prevTurns + 1)
  }
 
 // calls the newCards function when the page initially loads
@@ -129,8 +131,9 @@ function fillArray()
         <h1 className="App-header">Memory Game</h1>
         <CountDownTimerDisplay timer = {<Timer active={true} duration={null}><Timecode /></Timer>}/>
         
-        <TurnDisplay
-          count={turns} />
+        <TurnDisplay count={turns} />
+
+
           
             <div className="cards">
             {cardFront.map(cardFront => (
