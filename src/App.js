@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { findRenderedDOMComponentWithTag } from "react-dom/test-utils";
 import './App.css';
 import SingleCard from "./components/SingleCard";
 import image from "./images/logo192.png";
@@ -133,7 +132,7 @@ class CountDownTimer extends React.Component {
  
   render() {
     var counterStyle = {
-      color: "#0960EC",
+      color: "#61dafb",
       fontSize: 30,
       margin: 0
     };
@@ -156,7 +155,6 @@ class CountDownTimerDisplay extends React.Component {
     var divStyle = {
       width: 250,
       textAlign: "center",
-      backgroundColor: "darkslategray",
       padding: 20,
       margin: "auto",
       marginLeft: 111,
@@ -192,34 +190,17 @@ class CountDownTimerDisplay extends React.Component {
     );
   }
 }
+    
 
-class MatchCount extends React.Component{
-  render()
-  {
-  var counterStyle = {
-      color: "#0960EC",
-      fontSize: 30,
-      margin: 0
-    };
-    var count = 0;
-
-    return(
-      <h1 style={counterStyle}>{count}</h1>
-    );
-  }
-};
-
-class MatchDisplay extends React.Component {
-  render() {
+  function MatchDisplay({count}) {
     var commonStyle = {
       margin: 0,
       padding: 0
-    };
- 
+    }
+
     var divStyle = {
       width: 250,
       textAlign: "center",
-      backgroundColor: "darkslategray",
       padding: 20,
       margin: "auto",
       fontFamily: "sans-serif",
@@ -227,32 +208,36 @@ class MatchDisplay extends React.Component {
       borderRadius: 10, 
       float: "left"
     };
- 
+
     var textStyles = {
       emphasis: {
-        fontSize: 38,
-        ...commonStyle
+      fontSize: 38,
+      ...commonStyle
       },
       smallEmphasis: {
-        ...commonStyle
+      ...commonStyle
       },
       small: {
-        fontSize: 17,
-        opacity: 0.5,
-        ...commonStyle
+      fontSize: 17,
+      opacity: 0.5,
+      ...commonStyle
       }
     };
- 
-    return (
-      <div style={divStyle}>
-        <h2 style={textStyles.smallEmphasis}>Attempts</h2>
-        <MatchCount />
-      </div>
-    );
-  }
-}
 
-
+    var counterStyle = {
+      color: "#61dafb",
+      fontSize: 30,
+      margin: 0,
+      fontWeight: "bold"
+    };
+   
+      return (
+        <div style={divStyle}>
+          <h2 style={textStyles.smallEmphasis}>Turns</h2>
+            <div style={counterStyle}>{count}</div>
+          </div>
+      );
+    }
 
  export default function App() {
 
@@ -260,6 +245,7 @@ class MatchDisplay extends React.Component {
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
+  const [disabled, setDisabled] = useState(false)
   
   const cards = fillArray()
   
@@ -268,10 +254,14 @@ class MatchDisplay extends React.Component {
       .map((cardFronts) => ({...cardFronts, id: Math.random(), matched: false}))
 
     setCardFronts(newCards)
+    setChoiceOne(null)
+    setChoiceTwo(null)
     setTurns(0)
 
   }
- 
+
+
+
  const handleChoice = (cardFronts) => {
     choiceOne ? setChoiceTwo(cardFronts): setChoiceOne(cardFronts)
  }
@@ -279,6 +269,7 @@ class MatchDisplay extends React.Component {
  useEffect(() => {
     if (choiceOne && choiceTwo)
     {
+      setDisabled(true)
         if (choiceOne.props.card === choiceTwo.props.card){
           setCardFronts(prevCardFronts => {
             return prevCardFronts.map(cardFronts => {
@@ -292,26 +283,33 @@ class MatchDisplay extends React.Component {
               }
             })
           })
-          
+          resetTurn()
         }
         else{
-          setTimeout(() => resetTurn(), 500)
+          setTimeout(() => resetTurn(), 1300)
           console.log(choiceOne, choiceTwo)
         }
     }
  }, [choiceOne, choiceTwo])
 
+
  const resetTurn = () => {
   setChoiceOne(null)
   setChoiceTwo(null)
   setTurns(prevTurns => prevTurns + 1)
+  setDisabled(false)
  }
+
+ useEffect(() =>{
+    newCards()
+ }, [])
 
                     return (
     <div className="App">
-      <h1>Color Memory Game</h1>
+      <h1 className="App-header">Color Memory Game</h1>
       <CountDownTimerDisplay />
-      <MatchDisplay />
+      <MatchDisplay
+        count={turns} />
          
            <div className="cards">
           {cardFronts.map(cardFronts => (
@@ -321,7 +319,8 @@ class MatchDisplay extends React.Component {
               cardBack = {<CardBack />}
               handleChoice ={handleChoice}
               flipped={cardFronts === choiceOne || cardFronts === choiceTwo} 
-              solved={cardFronts.matched}/>
+              solved={cardFronts.matched}
+              disabled={disabled}/>
           ))}
         </div>
         <button 
