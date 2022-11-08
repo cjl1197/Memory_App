@@ -15,10 +15,12 @@ import React from "react";
 //         strikes: this.state.strikes + 1,
 //       });
 //     }
-  
+    
 //     componentDidMount() {
 //       setInterval(this.timerTick, 1000);
-//     }
+//   }
+    
+  
    
 //     render() {
 //       var counterStyle = {

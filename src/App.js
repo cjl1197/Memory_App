@@ -51,12 +51,23 @@ function fillArray()
  export default function App() {
 
   // declaration of variables with setState functions
-  const [cardFront, setCardFronts] = useState([])
+  const [cardFront, setCardFront] = useState([])
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
-  const [disabled, setDisabled] = useState(false) 
+  const [disabled, setDisabled] = useState(true) 
   const [count, setCount] = useState(0)
+  const [finished, setFinished] = useState(true)
+  const [gameOne, setGameOne] = useState(true)
+
+
+  const startGame = () =>
+  {
+    const firstCards = fillArray()
+      .map((cardFront) => ({...cardFront, id: Math.random(), matched: false}))
+
+      setCardFront(firstCards)
+  }
 
   // function call on start or when New Game button is pushed
   // fills cardFront array...adds id and matched boolean to each card front
@@ -64,14 +75,15 @@ function fillArray()
   const newCards = () => {
     const newCards = fillArray()
       .map((cardFront) => ({...cardFront, id: Math.random(), matched: false}))
-
-    setCardFronts(newCards)
+ 
+    setCardFront(newCards)
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(0)
     setCount(0)
-    
-
+    setFinished(false)
+    setGameOne(false)
+    setDisabled(false)
   }
 
   // checks if a choice has been made when card is clicked and sets choiceOne or choiceTwo
@@ -89,8 +101,12 @@ function fillArray()
       setDisabled(true)
         if (choiceOne.props.card === choiceTwo.props.card){
           setCount(prevCount => prevCount + 1)
+            if(count === 9)
+            {
+              setFinished(true)
+            }
           setTimeout(() =>
-          setCardFronts(prevCardFront => {
+          setCardFront(prevCardFront => {
             return prevCardFront.map(cardFront => {
               if (cardFront.props.card === choiceOne.props.card)
               {
@@ -113,6 +129,8 @@ function fillArray()
     }
  }, [choiceOne, choiceTwo])
 
+ console.log(count, finished)
+
 // sets choices back to null, add 1 to the turn count and re-enables onclick to choose card
  const resetTurn = () => {
   setChoiceOne(null)
@@ -124,13 +142,13 @@ function fillArray()
 // calls the newCards function when the page initially loads
 // without this there would be no cards visible on initial load
  useEffect(() =>{
-    newCards()
+    startGame()
  }, [])
 
     return (
       <div className="App">
         <h1 className="App-header">Memory Game</h1>
-        <CountDownTimerDisplay timer = {<Timer active={false} duration={null}><Timecode /></Timer>}/>
+        <CountDownTimerDisplay timer = {<Timer active = {finished ? false : true} duration={null}><Timecode /></Timer>}/>
         
         <TurnDisplay count={turns} />
 
@@ -148,10 +166,14 @@ function fillArray()
                 disabled={disabled}/>
             ))}
           </div>
+          {gameOne ?
           <button 
           onClick = {() => {
+            newCards()
+          }}> Start Game </button> : <button 
+          onClick = {() => {
             newCards();
-          }}> New Game </button>
+          }}> New Game </button>}
       </div>
     );
   }
