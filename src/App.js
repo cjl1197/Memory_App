@@ -131,6 +131,8 @@ function fillArray()
 
  console.log(count, finished)
 
+
+
 // sets choices back to null, add 1 to the turn count and re-enables onclick to choose card
  const resetTurn = () => {
   setChoiceOne(null)
