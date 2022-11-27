@@ -1,45 +1,48 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 
-// class CountDownTimer extends React.Component {
-//     constructor(props) {
-//       super(props);
-//       this.state = {
-//         strikes: 0,
-//       };
-  
-//     }
+function Timer2({active}) {
     
-    
-//     timerTick = () =>{
-//       this.setState({
-//         strikes: this.state.strikes + 1,
-//       });
-//     }
-    
-//     componentDidMount() {
-//       setInterval(this.timerTick, 1000);
-//   }
-    
-  
-   
-//     render() {
-//       var counterStyle = {
-//         color: "#61dafb",
-//         fontSize: 30,
-//         margin: 0
-//       };
-   
-//       var count = this.state.strikes.toLocaleString();
-  
-//     return (
-//           <h1 style={counterStyle}>{count}</h1>
-//         );
-//     }
-//   }
-  
-//   class CountDownTimerDisplay extends React.Component {
-//     render() {
-    function CountDownTimerDisplay({timer}) {
+    const [minutes, setMinutes] =useState(0)
+    const [seconds1, setSeconds1] = useState(0)
+    const [seconds2, setSeconds2] = useState(0)
+    const [isActive, setIsActive] = useState(false)
+
+    useEffect(() => {
+      let interval = null;
+      setIsActive(active)
+      console.log(isActive)
+      if (isActive){
+        interval = setInterval (() => {
+          setSeconds1(seconds1 => seconds1 + 1);
+          if (seconds1 === 9)
+          {
+            setSeconds1(0)
+            setSeconds2(seconds2 => seconds2 + 1)
+          }
+          if (seconds2 === 5 && seconds1 === 9)
+          {
+            setSeconds1(0)
+            setSeconds2(0)
+            setMinutes(minutes => minutes + 1)
+          }
+        }, 1000)
+      }
+      else if (!isActive && seconds1 !== 0) {
+        clearInterval(interval);
+      }
+      return () => clearInterval(interval);
+    }, [isActive, seconds1, seconds2, minutes]);
+
+    return (
+      <div>
+        {minutes}:{seconds2}{seconds1}
+      </div>
+    );
+}
+
+    function CountDownTimerDisplay({active}) {
+
+
       var commonStyle = {
         margin: 0,
         padding: 0
@@ -85,10 +88,11 @@ import React from "react";
         <div style={divStyle}>
           <h2 style={textStyles.smallEmphasis}>Time</h2>
           
-          <div style={counterStyle}>{timer}</div>
+          <div style={counterStyle}><Timer2 active = {active}/></div>
         </div>
       );
     }
+
 
 
   export default CountDownTimerDisplay

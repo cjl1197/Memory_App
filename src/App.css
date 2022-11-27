@@ -44,6 +44,12 @@
     float: left;
     padding-left: 18px;
   }
+
+  .score{
+    float: left;
+    margin-top: 15%;
+    margin-left: 5%;
+  }
   
 
 

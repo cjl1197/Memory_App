@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import './App.css';
 import SingleCard from "./components/SingleCard";
 import Card from "./components/Card";
 import CardBack from "./components/CardBack";
 import CountDownTimerDisplay from "./components/CountDownTimerDisplay";
 import TurnDisplay from "./components/TurnDisplay";
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
-
+import HighScore from "./components/HighScores";
+import axios from 'axios';
 
 
 // function builds array of color cards and randomizes their indexes
@@ -59,7 +58,8 @@ function fillArray()
   const [count, setCount] = useState(0)
   const [finished, setFinished] = useState(true)
   const [gameOne, setGameOne] = useState(true)
-
+  const [playerName, setPlayerName] = useState(null)
+  
 
   const startGame = () =>
   {
@@ -76,6 +76,7 @@ function fillArray()
     const newCards = fillArray()
       .map((cardFront) => ({...cardFront, id: Math.random(), matched: false}))
  
+    setPlayerName(prompt("Please Enter Your Name."));
     setCardFront(newCards)
     setChoiceOne(null)
     setChoiceTwo(null)
@@ -104,6 +105,7 @@ function fillArray()
             if(count === 9)
             {
               setFinished(true)
+              submit();
             }
           setTimeout(() =>
           setCardFront(prevCardFront => {
@@ -125,12 +127,8 @@ function fillArray()
         else{
           setTimeout(() => resetTurn(), 1300)
         }
-        console.log(choiceOne, choiceTwo)
     }
  }, [choiceOne, choiceTwo])
-
- console.log(count, finished)
-
 
 
 // sets choices back to null, add 1 to the turn count and re-enables onclick to choose card
@@ -147,10 +145,35 @@ function fillArray()
     startGame()
  }, [])
 
+ const submit = () => {
+  console.log(playerName);
+    const data = {
+      name: playerName,
+      time: '145'
+    };
+
+    axios({
+      url: 'api/save',
+      method: 'POST',
+      data: data
+    })
+    .then(() => {
+      console.log('Data has been sent to the server!')
+    })
+    .catch(() => {
+      console.log('There was an error in sending the data to the server.')
+    })
+
+ };
+
     return (
+      <>
+      <div className="score">
+        <HighScore />
+        </div>
       <div className="App">
         <h1 className="App-header">Memory Game</h1>
-        <CountDownTimerDisplay timer = {<Timer active = {finished ? false : true} duration={null}><Timecode /></Timer>}/>
+        <CountDownTimerDisplay active = {finished ? false : true} />
         
         <TurnDisplay count={turns} />
 
@@ -168,6 +191,9 @@ function fillArray()
                 disabled={disabled}/>
             ))}
           </div>
+          <div>
+            <input type={"text"}></input>
+          </div>
           {gameOne ?
           <button 
           onClick = {() => {
@@ -177,5 +203,7 @@ function fillArray()
             newCards();
           }}> New Game </button>}
       </div>
+      </>
     );
+    
   }
