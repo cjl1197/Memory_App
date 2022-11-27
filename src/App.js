@@ -59,6 +59,7 @@ function fillArray()
   const [finished, setFinished] = useState(true)
   const [gameOne, setGameOne] = useState(true)
   const [playerName, setPlayerName] = useState(null)
+  const [time2, setTime2] = useState('0:00');
   
 
   const startGame = () =>
@@ -127,6 +128,7 @@ function fillArray()
         else{
           setTimeout(() => resetTurn(), 1300)
         }
+        console.log(time2)
     }
  }, [choiceOne, choiceTwo])
 
@@ -149,7 +151,7 @@ function fillArray()
   console.log(playerName);
     const data = {
       name: playerName,
-      time: '145'
+      time: time2
     };
 
     axios({
@@ -173,7 +175,8 @@ function fillArray()
         </div>
       <div className="App">
         <h1 className="App-header">Memory Game</h1>
-        <CountDownTimerDisplay active = {finished ? false : true} />
+        {!finished && <CountDownTimerDisplay active = {finished ? false : true} time = {setTime2}/>}
+        {finished && <CountDownTimerDisplay time = {time2}/>}
         
         <TurnDisplay count={turns} />
 

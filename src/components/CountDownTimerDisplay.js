@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 
-function Timer2({active}) {
+function Timer2({active, time}) {
     
     const [minutes, setMinutes] =useState(0)
     const [seconds1, setSeconds1] = useState(0)
@@ -10,7 +10,6 @@ function Timer2({active}) {
     useEffect(() => {
       let interval = null;
       setIsActive(active)
-      console.log(isActive)
       if (isActive){
         interval = setInterval (() => {
           setSeconds1(seconds1 => seconds1 + 1);
@@ -33,6 +32,8 @@ function Timer2({active}) {
       return () => clearInterval(interval);
     }, [isActive, seconds1, seconds2, minutes]);
 
+    time(minutes.toString() + ':' + seconds2.toString() + seconds1.toString())
+
     return (
       <div>
         {minutes}:{seconds2}{seconds1}
@@ -40,8 +41,7 @@ function Timer2({active}) {
     );
 }
 
-    function CountDownTimerDisplay({active}) {
-
+    function CountDownTimerDisplay({active, time}) {
 
       var commonStyle = {
         margin: 0,
@@ -88,7 +88,7 @@ function Timer2({active}) {
         <div style={divStyle}>
           <h2 style={textStyles.smallEmphasis}>Time</h2>
           
-          <div style={counterStyle}><Timer2 active = {active}/></div>
+          <div style={counterStyle}>{!active && time}{active && <Timer2 active = {active} time={time}/>}</div>
         </div>
       );
     }
