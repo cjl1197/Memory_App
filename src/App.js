@@ -60,6 +60,7 @@ function fillArray()
   const [gameOne, setGameOne] = useState(true)
   const [playerName, setPlayerName] = useState(null)
   const [time2, setTime2] = useState('0:00');
+  const [scores, setScores] = useState([])
   
 
   const startGame = () =>
@@ -107,6 +108,7 @@ function fillArray()
             {
               setFinished(true)
               submit();
+              deleteMax();
             }
           setTimeout(() =>
           setCardFront(prevCardFront => {
@@ -148,7 +150,6 @@ function fillArray()
  }, [])
 
  const submit = () => {
-  console.log(playerName);
     const data = {
       name: playerName,
       time: time2
@@ -168,10 +169,20 @@ function fillArray()
 
  };
 
+ const deleteMax = () => {
+    //try{
+        axios.delete('api/delete/')
+//     }
+//     catch (error)
+//     {
+//       console.log(error)
+//     }
+ }
+
     return (
       <>
       <div className="score">
-        <HighScore />
+        <HighScore scores = {setScores}/>
         </div>
       <div className="App">
         <h1 className="App-header">Memory Game</h1>

@@ -1,71 +1,40 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import axios from 'axios';
 
-// var scores = [
-//                 ['Craig', 150]
-//             ];
-class Scores extends React.Component {
+function Scores() {
+  const [scores2, setScores2] = useState([]);
 
-  state = {
-    scores: []
-  }
+  useEffect(() => {
+    getScores()
+  }, [])
 
-componentDidMount = () => {
-  this.getScores();
-};
-
-  getScores = () => {
-    axios.get('/api')
-    .then((response) => {
-      const data = response.data
-      this.setState({ scores: data})
-      console.log('Data has been received!')
-    })
-    .catch(() => {
-      console.log('There was an error receiving the data.')
-    })
-    console.log(this.state.scores)
- };
-
- printScores = (scores) => {
-
-    if (!scores.length) return null;
-
-
-   return scores.map((score, index) => {
+  const getScores = () => {
+        axios.get('/api')
+        .then((response) => {
+          const data = response.data
+          setScores2(data)
+          scores2(scores2)
+          console.log('Data has been received!')
+        })
+        .catch(() => {
+          console.log('There was an error receiving the data.')
+        })
+     };
+  
+    return scores2.map((score, index) => {
       return  <div key={index}>
-                <h3>{score.name}  {score.time}</h3>
+               <h3>{score.name}  {score.time}</h3>
               </div>
     })
- };
-
-
-  render() {
-
-
-
-    return (
-      <div>
-          <h3>
-              {this.printScores(this.state.scores)}
-          </h3>
-      </div>
-    );
-  }
 }
+
 
 class ScoreLabel extends React.Component {
     
     render() {
         var labelStyle = {
             justifyContent: "center",
-        };
-
-        // var scoreStyle = {
-        //     float: "left";
-        // };
-
-        
+        };        
     
         return (
             <div style={labelStyle}>
