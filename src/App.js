@@ -156,7 +156,7 @@ function fillArray()
     };
 
     axios({
-      url: 'https://lawyernodeserver.duckdns.org:8080/api/save',
+      url: '/api/save',
       method: 'POST',
       data: data
     })

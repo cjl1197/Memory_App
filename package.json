@@ -26,6 +26,6 @@
         "eslintConfig":{"extends":["react-app","react-app/jest"]},
         "browserslist":{"production":[">0.2%","not dead","not op_mini all"],
         "development":["last 1 chrome version","last 1 firefox version","last 1 safari version"]},
-        "proxy": "http://192.168.50.117:8080"
+        "proxy": "https://lawyernodeserver.duckdns.org:8080"
         
     }
