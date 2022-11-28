@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Memory_App/static/css/main.c8201a64.css",
-    "main.js": "/Memory_App/static/js/main.c476eaea.js",
+    "main.js": "/Memory_App/static/js/main.9306e20e.js",
     "index.html": "/Memory_App/index.html",
     "main.c8201a64.css.map": "/Memory_App/static/css/main.c8201a64.css.map",
-    "main.c476eaea.js.map": "/Memory_App/static/js/main.c476eaea.js.map"
+    "main.9306e20e.js.map": "/Memory_App/static/js/main.9306e20e.js.map"
   },
   "entrypoints": [
     "static/css/main.c8201a64.css",
-    "static/js/main.c476eaea.js"
+    "static/js/main.9306e20e.js"
   ]
 }
